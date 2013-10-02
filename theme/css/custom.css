@@ -1,0 +1,10 @@
+ol { margin: 1em 0 1em 2em; }
+ol li { margin-bottom: 0.3em; }
+li { line-height: 1.2em; }
+em { font-style: italic; }
+strong { font-weight: bold; }
+figcaption { font-size: 0.6em; line-height: 1.2em; }
+h4 { margin-bottom: 0.5em; }
+
+.smaller ol { font-size: 0.8em; }
+.btns { text-align: right; }

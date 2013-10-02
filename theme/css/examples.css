@@ -1,0 +1,7 @@
+body { font-family: Helvetica, Arial; }
+
+.container { width: 80%; margin: 0 auto; }
+
+/* The latest, cleanest, semantic "clearfix" */
+.group:after { content: ""; display: table; clear: both; }
+.col2 { width: 50%; float: left; }
