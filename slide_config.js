@@ -1,12 +1,12 @@
 var SLIDE_CONFIG = {
   // Slide settings
   settings: {
-    title: 'Front-End Performance',
+    title: 'Blurb & Ember',
     subtitle: 'Best practices and tools',
-    //eventInfo: {
-    //  title: 'Google I/O',
-    //  date: '6/x/2013'
-    //},
+    eventInfo: {
+     title: 'Ember.js SF Meetup',
+     date: '10/15/2013'
+    },
     useBuilds: true, // Default: true. False will turn off slide animation builds.
     usePrettify: true, // Default: true
     enableSlideAreas: true, // Default: true. False turns off the click areas on either slide of the slides.
@@ -23,10 +23,10 @@ var SLIDE_CONFIG = {
   // Author information
   presenters: [{
     name: 'Estella Madison',
-    company: '',
+    company: 'Blurb',
     gplus: '',
     twitter: '@chicagoing',
-    www: 'http://www.estellagonzalez.com',
+    www: 'http://www.estellamadison.com',
     github: 'http://github.com/chicagoing'
   }/*, {
     name: 'Second Name',
