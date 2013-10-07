@@ -23,11 +23,11 @@ var SLIDE_CONFIG = {
   // Author information
   presenters: [{
     name: 'Estella Madison',
-    company: 'Blurb',
+    company: 'Front End Engineer, Blurb',
     gplus: '',
-    twitter: '@chicagoing',
+    twitter: '@chicagoing'/*,
     www: 'http://www.estellamadison.com',
-    github: 'http://github.com/chicagoing'
+    github: 'http://github.com/chicagoing'*/
   }/*, {
     name: 'Second Name',
     company: 'Job Title, Google',

@@ -37,522 +37,164 @@
 
   <slide>
     <hgroup>
-      <h2>Overview</h2>
+      <h2>E-book Editor</h2>
     </hgroup>
     <article>
       <ul>
-        <li>CSS
-          <ul>
-            <li>Efficiency of selectors</li>
-            <li>Overqualifying selectors</li>
-            <li>The <em>key</em> selector</li>
-            <li>Performance is about balance</li>
-            <li>Hardware acceleration</li>
-          </ul>
-        </li>
-
-        <li>JavaScript
-          <ul>
-            <li>Avoiding repaints &amp; reflows</li>
-            <li>Stop using jQuery (for everything)</li>
-            <li>Loading JavaScript is a performance bottleneck</li>
-            <li>Using local storage to improve performance</li>
-            <li>RESS (Responsive Web Design + Server Side Components)</li>
-          </ul>
-        </li>
+        <li>HTML5 editing tool</li>
+        <li>Print to ebook converter</li>
+        <li>Fixed layouts</li>
+        <li>Enhanced ebooks (video &amp; audio)</li>
+        <li>Started development in 2011 using SproutCore</li>
+      </ul>
+      <h3>Unique</h3>
+      <ul>
+        <li>Not a CRUD-style application (create, read, update and delete)</li>
+        <li>Router is set up differently from the typical blog-type application</li>
+        <li>Heavy image manipulation with Javascript and CSS3</li>
       </ul>
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>CSS</h2>
-      <h3>Efficiency of selectors</h3>
-    </hgroup>
-    <article class="smaller">
-      <p>The order of more to less efficient CSS selectors is:</p>
-      <ol>
-        <li>ID, e.g. <code>#header</code></li>
-        <li>Class, e.g. <code>.promo</code></li>
-        <li>Type, e.g. <code>div</code></li>
-        <li>Adjacent sibling, e.g. <code>h2 + p</code></li>
-        <li>Child, e.g. <code>li &gt; ul</code></li>
-        <li>Descendant, e.g. <code>ul a</code></li>
-        <li>Universal, i.e. <code>*</code></li>
-        <li>Attribute, e.g. <code>[type="text"]</code></li>
-        <li>Pseudo-classes/-elements, e.g. <code>a:hover</code></li>
-      </ol>
-      <p>Note that, although an ID is technically faster, it is barely so.</p>
-    </article>
-    <footer class="source">Even Faster Websites by Steve Souders</footer>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>CSS</h2>
-      <h3>Overqualifying selectors</h3>
-    </hgroup>
-    <article class="smaller">
-      <p>Don't nest too deeply (max should be 3 levels) and make a point of reviewing the generated CSS.</p>
-      <pre class="prettyprint" data-lang="sass">
-#main_tab_group
-  .pane
-    &hellip;
-    .settings_content
-      &hellip;
-      .pro-info
-        &hellip;
-        .change-link
-          &hellip;
-          a
-            font-size: 9px
-            background-color: $orange
-            color: white</pre>
-      <p>Is generated as:</p>
-      <pre class="prettyprint" data-lang="css">#main_tab_group .pane .settings_content .pro-info .change-link a {}</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>CSS</h2>
-      <h3>Overqualifying selectors</h3>
-    </hgroup>
-    <article class="smaller">
-      <p>Consider revising the SASS as:</p>
-      <pre class="prettyprint" data-lang="sass">
-#main_tab_group
-  .change-link a
-    font-size: 9px
-    background-color: $orange
-    color: white</pre>
-      <p>The new generated selector now looks like:</p>
-      <pre class="prettyprint" data-lang="css">#main_tab_group .change-link a {}</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>CSS</h2>
-      <h3>The <em>key</em> selector</h3>
-    </hgroup>
-    <article class="smaller">
-      <p>The key selector is the right-most part of a CSS selector. This is what the browser looks for first.</p>
-      <pre class="prettyprint" data-lang="html">
-&lt;ul id="main_tab_group">
-  &lt;li class="change-link">&lt;a href="#">Link 1&lt;/a>&lt;/li>
-  &lt;li class="change-link">&lt;a href="#">Link 2&lt;/a>&lt;/li>
-&lt;/ul></pre>
-      <p>
-        <!-- The browser searches first for all links on the page until it settles on the two inside
-        the #main_tab_group list.  -->With this in mind, we can optimize the CSS even further with:
-      </p>
-      <pre class="prettyprint" data-lang="css">
-#main_tab_group .action-link {
-  font-size: 9px
-  background-color: $orange
-  color: white
-}</pre>
-      <pre class="prettyprint" data-lang="html">
-&lt;ul id="main_tab_group">
-  &lt;li class="change-link">&lt;a href="#" class="action-link">Link 1&lt;/a>&lt;/li>
-  &lt;li class="change-link">&lt;a href="#" class="action-link">Link 2&lt;/a>&lt;/li>
-&lt;/ul></pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>CSS</h2>
-      <h3>Performance is about balance</h3>
+      <h2>Main issues</h2>
+      <h3>Documentation</h3>
     </hgroup>
     <article>
-      <p>
-        The previous example of replacing the <code>a</code> selector with the class name
-        <code>action-link</code> goes against what we know; we know not to put unneccessary classes on elements
-        when we use leaner markup.
-      </p>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>CSS</h2>
-      <h3>Hardware acceleration</h3>
-    </hgroup>
-    <article>
-      <p>Offload tasks that would otherwise be calculated by the main CPU to the GPU.</p>
-      <pre class="prettyprint" data-lang="css">
-        /* Force hardware acceleration */
-        transform: translate3d(0, 0, 0);</pre>
-      <p>Most CSS is computed on the CPU, but the <code>translate</code> version gets elevated to the GPU.
-    </article>
-    <footer class="source">
-      <ul>
-        <li>Paul Irish, paulirish.com, "<a href="http://www.paulirish.com/2012/why-moving-elements-with-translate-is-better-than-posabs-topleft/">Why Moving Elements With Translate() Is Better Than Pos:abs Top/left</a>"</li>
-        <li>David Walsh, davidwalsh.name, "<a href="http://davidwalsh.name/translate3d">Force Hardware Acceleration in WebKit with translate3d</a>"
-    </footer>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Avoiding repaints &amp; reflows</h2>
-      <h3>What triggers a repaint or reflow?</h3>
-    </hgroup>
-    <article>
-      <p>Changes to the DOM tree can cause a repaint or a reflow:</p>
-      <ul>
-        <li>Adding, removing, updating DOM nodes</li>
-        <li>Hiding a DOM node with <code>display: none</code> (reflow and repaint) or <code>visibility: hidden</code> (repaint only, because no geometry changes)</li>
-        <li>Adding a stylesheet, tweaking style properties</li>
-        <li>User action such as resizing the window, hovering, changing the font size, or scrolling</li>
-      </ul>
-    </article>
-    <footer class="source">Stoyan Stefanov, phpied.com, "<a href="http://www.phpied.com/rendering-repaint-reflowrelayout-restyle/">Rendering: repaint, reflow/relayout, restyle</a>"</footer>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Avoiding repaints &amp; reflows</h2>
-      <h3>Browsers are smart</h3>
-    </hgroup>
-    <article class="smaller">
-      <p>
-        Changes are queued and performed in batches.
-        Several changes that each require a reflow will be combined and require only one reflow.
-      </p>
-      <p>
-        But sometimes our scripts prevent browsers from optimizing the reflows, causing them to
-        flush the queue and perform all batched changes. This happens when we request style information like:
-      </p>
-      <div class="columns-2">
-        <ul>
-          <li><code class="red">window.getComputedStyle()</code></li>
-          <li><code class="red">window.scrollBy()</code></li>
-          <li><code class="red">window.scrollTo()</code></li>
-          <li><code class="red">window.scrollX/scrollY</code></li>
-          <li><code class="red">element.clientHeight/Left/Top</code></li>
-          <li><code class="red">element.getBoundingClientRect()</code></li>
-          <li><code class="red">element.getClientRects()</code></li>
-          <li><code class="red">element.innerText/outerText</code></li>
-          <li><code class="red">element.offsetHeight/Width/Parent/Top</code></li>
-          <li><code class="red">element.scrollLeft/Top/Width</code></li>
-        </ul>
-      </div>
-    </article>
-    <footer class="source">Tony Gentilcore, gent.ilcore.com, "<a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html">How (not) to trigger a layout in WebKit</a>"</footer>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Avoiding repaints &amp; reflows</h2>
-      <h3>Minimizing repaints and reflows</h3>
-    </hgroup>
-    <article>
-      <p>
-        Don't change individual styles, one by one. Use class names when possible or edit the <code>cssText</code>
-        property (as opposed to touching the element and its style property for every change).
-      </p>
+      <p>We used the online documentation, but relied mostly on reading comments included with the unminified&nbsp;file:</p>
       <pre class="prettyprint" data-lang="javascript">
-// bad
-el.style.left = "10px";
-el.style.top  = "10px";
+/**
+  An `Ember.Binding` connects the properties of two objects so that whenever
+  the value of one property changes, the other property will be changed also.
 
-// better
-el.className += " theclassname";
+  ## Automatic Creation of Bindings with `/^*Binding/`-named Properties
 
-// or when top and left are calculated dynamically...
-// better
-el.style.cssText += "; left: " + left + "px; top: " + top + "px;";</pre>
+  You do not usually create Binding objects directly but instead describe
+  bindings in your class or object definition using automatic binding
+  detection.</pre>
     </article>
-    <footer class="source">Stoyan Stefanov, phpied.com, "<a href="http://www.phpied.com/rendering-repaint-reflowrelayout-restyle/">Rendering: repaint, reflow/relayout, restyle</a>"</footer>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>Avoiding repaints &amp; reflows</h2>
-      <h3>Minimizing repaints and reflows</h3>
+      <h2>Main issues</h2>
+      <h3>The "Ember way"</h3>
     </hgroup>
-    <article class="smaller">
-      <p>Group DOM changes and don't manipulate the "live" DOM tree.</p>
-      <ul>
-        <li>Use <code>documentFragment</code>.</li>
-        <li>Clone the node being updated, work on the copy, then replace the original with the updated one.</li>
-        <li>Hide the element with <code>display: none</code>, make your changes, and show the element.</li>
+    <article>
+      <p>We struggled with figuring out the Ember way of doing things.</p>
+      <ul class="build">
+        <li><strong>Managing controllers that relied on each other.</strong> As a result, a lot of our controllers were declared within the global namespace. For a while we had <code>connectControllers()</code> which was called from the router, but we can now use <code>needs</code> from within a controller to connect these.</li>
+        <li><strong>Too much logic in our views.</strong> MVC was new to some of us. We quickly realized that moving more of our logic into our controllers made our app more maintainable. This became even easier when the view context was updated to default to the supplied controller with the Ember 1.0 Prerelease.</li>
+        <li><strong>Managing application state.</strong> Initially we managed state via properties on controllers. Eventually, we ported this over to Ember.StateManager and Ember.Router.</li>
       </ul>
-      <p>Don't request computed styles excessively. Cache values into variables when possible.</p>
-      <p>
-        <!-- Think about the render tree and how much of it will need to be re-evaluated after your change. -->
-        Manipulating elements nested deeper in the DOM might require ancestor elements to be revalidated.
-        However, using absolute positioning makes nested elements a child of the body in the render tree, so
-        it won't affect as many nodes when you change it.
-      </p>
     </article>
-    <footer class="source">Stoyan Stefanov, phpied.com, "<a href="http://www.phpied.com/rendering-repaint-reflowrelayout-restyle/">Rendering: repaint, reflow/relayout, restyle</a>"</footer>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>Avoiding repaints &amp; reflows</h2>
-      <h3>Measuring performance</h3>
+      <h2>Main issues</h2>
+      <h3>Debugging</h3>
     </hgroup>
     <article class="smaller">
-      <h4>Chrome tools</h4>
-      <ul>
-        <li><strong>Timeline (Web Inspector > Timeline > record)</strong>: use parts of your app that you suspect are slow. <a href="http://css3exp.com/moon/#">Example</a></li>
-        <li><strong>Show paint rectanges (Settings > General)</strong>: highlights the regions where repaints are happening</li>
+      <p>Chrome Dev Tools is the obvious debugging tool, but some of the vague errors thrown by Ember made it difficult to trace the source.</p>
+      <ul class="build">
         <li>
-          <strong>Continuous painting mode (chrome://flags > GPU compositing on all pages)</strong>: helps us identify which elements are costly on the page.
-          It puts the page into an always repainting state, showing a counter of much painting work is happening.
-          Then, you can hide elements and mutate styles watching the counter, in order to figure out what is slow.
+            <p><strong>Cannot perform operations on a Metamorph that is not in the DOM.</strong></p>
+            <ul>
+              <li>This usually occurred on views surrounded by <code>{{#if}}</code> handlebar helpers.</li>
+              <li>Also occurred we tried manipulating the element before it was in the DOM (triggered by an observer).</li>
+            </ul>
+            <p>
+              In most cases we were able to resolve the issue by wrapping any DOM manipulation with:
+              <code>if (this.get('state') === 'inDOM')</code>
+            </p>
         </li>
+        <li>From the console, we frequently used <code>Ember.inspect()</code> and <code>Ember.View.views["ember1234"]</code>.</li>
+        <li>Now we have the Ember Chrome extension to inspect objects.</li>
       </ul>
-    </article>
-    <footer class="source">Eberhard Grather, html5rocks.com, "<a href="http://updates.html5rocks.com/2013/02/Profiling-Long-Paint-Times-with-DevTools-Continuous-Painting-Mode">Profiling Long Paint Times with DevTools' Continuous Painting Mode</a>"</footer>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Stop using jQuery (for everything)</h2>
-      <h3>Native selectors are faster than jQuery (most of the time)</h3>
-    </hgroup>
-    <article class="smaller">
-      <pre class="prettyprint" data-lang="javascript" style="max-height: 124px; overflow: auto;">
-var elem, i, len = 100000;
-
-console.time('nativeJsById');
-for (i = 0; i < len; i++) { elem = document.getElementById('this-is-an-id'); }
-console.timeEnd('nativeJsById');
-
-console.time('nativeJsQuerySelector');
-for (i = 0; i < len; i++) { elem = document.querySelector('#this-is-an-id'); }
-console.timeEnd('nativeJsQuerySelector');
-
-console.time('jQuery');
-for (i = 0; i < len; i++) { elem = $("#this-is-an-id"); }
-console.timeEnd('jQuery');</pre>
-
-      <table>
-        <tr>
-          <th></th><th>getElementById()</th><th>querySelect()</th><th>$("#")</th><th>Zepto $("#")</th>
-        </tr>
-        <tr>
-          <td>Chrome</td><td class="highlight">6ms</td><td>35ms</td><td>110ms</td><td>167ms</td>
-        </tr>
-        <tr>
-          <td>Firefox</td><td>13ms</td><td>90ms</td><td>505ms</td><td>297ms</td>
-        </tr>
-        <tr>
-          <td>Safari</td><td>17ms</td><td>176ms</td><td>310ms</td><td>945ms</td>
-        </tr>
-        <tr>
-          <td>IE9</td><td>47ms</td><td>2745ms</td><td>177ms</td><td>&times;</td>
-        </tr>
-        <tr>
-          <td>IE10</td><td>55ms</td><td>4023ms</td><td>132ms</td><td>&times;</td>
-        </tr>
-      </table>
-      <div class="btns"><button type-"button" class="btn-demo" id="this-is-an-id" onclick="runById()">Run</button></div>
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>Stop using jQuery (for everything)</h2>
-      <h3>Native selectors are faster than jQuery (most of the time)</h3>
-    </hgroup>
-
-    <article>
-      <table>
-        <tr>
-          <th></th><th>getElementByClassName()</th><th>querySelect()</th><th>querySelectAll()</th><th>$(".")</th><th>Zepto $(".")</th>
-        </tr>
-        <tr>
-          <td>Chrome</td><td class="highlight">7ms</td><td>1515ms</td><td>1515ms</td><td>169ms</td><td>377ms</td>
-        </tr>
-        <tr>
-          <td>Firefox</td><td>18ms</td><td>1785ms</td><td>1857ms</td><td>802ms</td><td>475ms</td>
-        </tr>
-        <tr>
-          <td>Safari</td><td>19ms</td><td>1385ms</td><td>1451ms</td><td>920ms</td><td>993ms</td>
-        </tr>
-        <tr>
-          <td>IE9</td><td>96ms</td><td>3886ms</td><td>4142ms</td><td>423ms</td><td>&times;</td>
-        </tr>
-        <tr>
-          <td>IE10</td><td>68ms</td><td>4742ms</td><td>4029ms</td><td>309ms</td><td>&times;</td>
-        </tr>
-      </table>
-      <div class="btns"><button type-"button" class="btn-demo" class="this-is-a-class" onclick="runByClass()">Run</button></div>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Stop using jQuery (for everything)</h2>
-      <h3>A lot jQuery UI widgets can be implemented with far less code</h3>
-    </hgroup>
-    <article class="smaller">
-      <ul>
-        <li><strong>Accordion</strong>: the HTML5 <code>summary</code> and <code>details</code> elements can be used to give an accordion effect. They're not supported in IE or Firefox, but it's pretty easy to add the effect for these browsers using CSS and JavaScript.</li>
-        <li><strong>Progressbar</strong>: there's an <code>input[type="progress"]</code> element that has pretty good support, but building a simple progress bar is simple enough.</li>
-        <li><strong>Tabs</strong></li>
-        <li><strong>Tooltip</strong></li>
-      </ul>
-      <h4>... but still use it for new HTML5 input types aren't widely supported yet</h4>
-      <ul>
-        <li><strong>Datepicker</strong>: the <code>input[type="date"]</code> only works in Chrome, Opera, iOS Safari, and Blackberry Browser.</li>
-        <li><strong>Slider</strong>: the <code>input[type="range"]</code> is supported in all modern browsers except for Opera Mini, IE8 and IE9.</li>
-      </ul>
-    </article>
-    <footer class="source"><a href="http://caniuse.com">caniuse.com</a></footer>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Loading JavaScript is a performance bottleneck</h2>
-      <h3>We can start by minimizing the use of third-party libraries</h3>
-    </hgroup>
-    <article class="smaller">
-      <table style="width: 30%; margin-bottom: 1em;">
-        <tr>
-          <th>jQuery</td><td>93KB</td>
-        </tr>
-        <tr>
-          <th>jQuery UI</td><td class="highlight">228KB</td>
-        </tr>
-        <tr>
-          <th>YUI</td><td>87KB</td>
-        </tr>
-        <tr>
-          <th>Zepto</td><td>27KB</td>
-        </tr>
-      </table>
-
-      <p>&hellip; or use a server-side technique for loading the appropriate file for the browser.</p>
-      <ul>
-        <li>Load Zepto for modern browers instead of jQuery</li>
-        <li>Load jQuery UI only for browsers that don't support all the new HTML5 elements</li>
-      </ul>
-      <p>This is especially helpful for mobile websites.</p>
-    </article>
-  </slide>
-
-  <!-- <slide>
-    <hgroup>
-      <h2>Loading JavaScript is a performance bottleneck</h2>
-      <h3>script async &amp; defer</h3>
+      <h2>Main issues</h2>
+      <h3>Bindings</h3>
     </hgroup>
     <article>
       <ul>
-        <li><strong>script src</strong>: Halts parsing, blocks rendering.</li>
-        <li><strong>async</strong>: execute when script is downloaded, async.</li>
-        <li><strong>defer</strong>: execute after page is parsed, in order.</li>
-      </ul>
+        <li><strong>Binding didn't always trigger in the ideal order.</strong> In some cases, we were able to use the Ember.beforeObserver(). TODO: panel bindings may be an example, multiple panels showing up at once?</li>
+        <li><strong><code>isVisible</code> was slow and made the app seem sluggish.</strong> Swapping this out with the class name binding reduced the lag time.</li>
     </article>
-    <footer class="source">Steve Souders</footer>
-  </slide> -->
-
-  <slide>
-    <hgroup>
-      <h2>Loading JavaScript is a performance bottleneck</h2>
-      <h3>Loading what you need is better than byte shaving</h3>
-    </hgroup>
-    <article class="smaller">
-      <p>The 4 JavaScript Load Times</p>
-      <ol>
-        <li><strong>In &lt;head&gt;</strong>: Primarily analytics and small seed files.</li>
-        <li><strong>Before &lt;body&gt;</strong>: Anything needed by page load. Should be minimal.</li>
-        <li><strong>After page load</strong>: Anything needed soon after.</li>
-        <li><strong>On demand</strong>: Anything needed as a result of user action. The most difficult to implement. <a href="http://alexsexton.com/blog/2013/03/deploying-javascript-applications/">Example</a></li>
-      </ol>
-      <p>Using this as a guide, we can improve performance by only loading files as they're needed.</p>
-    </article>
-    <footer class="source">Nicholas Zakas, "<a href="http://www.slideshare.net/nzakas/enough-withthejavascriptalready">Enough with the JavaScript already!</a>" (p38)</footer>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>Using local storage to improve performance</h2>
-      <h3><code>window.localStorage</code></h3>
+      <h2>Best Practices</h2>
+      <h3>Use oneWay Bindings</h3>
     </hgroup>
-    <article class="smaller">
-      <p>How?</p>
-      <ul>
-        <li><strong>Reduce payload</strong>: Break up JavaScript and CSS into smaller blocks and save them into local storage. Simultaneously, you set a cookie so the server knows not to send the extra payload. Used mostly for mobile because cache sizes are smaller.</li>
-        <li><strong>Data persistence</strong>: Store data locally to reduce calls to the server. Allows an app to survive periods of downtime.</li>
-      </ul>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+var obj = Ember.Object.create({
+  valueBinding: Ember.Binding.oneWay('value')
+});</pre>
+       <p>According to the comments included with the unminified version:</p>
+       <blockquote>
+          One way bindings are <strong>almost twice as fast to setup and twice as fast to
+execute</strong> because the binding only has to worry about changes to one side.
+       </blockquote>
+    </article>
+  </slide>
 
-      <p>Limitations</p>
+  <slide>
+    <hgroup>
+      <h2>Best Practices</h2>
+      <h3>Avoid using jQuery (for everything)</h3>
+    </hgroup>
+    <article>
+      <p>When we started working with Ember, we overused jQuery because it was what we knew best.</p>
       <ul>
-        <li>5MB limit (differs between browsers)</li>
-        <li>API is synchronous</li>
-        <li>Security implications</li>
-        <li>Need to manually serialize/deserialize to and from string values</li>
+        <li><code>view.$().fadeIn()</code> and <code>view.$().fadeOut()</code>: replaced these with the CSS transition property.</li>
+        <li><code>view.$().hide()</code> and <code>view.$().show()</code>: we now use the view's <code>isVisible</code> property or <code>classNameBindings</code> that toggle the visibility.</li>
+        <li><code>view.$().append()</code> and <code>view.$().remove()</code>: instead of using jQuery to append/remove DOM elements, we now use Ember.ContainerViews.</li>
+        <li><strong>Avoided jQuery plugins as much as possible.</strong> Especially jQuery UI. We knew these would bloat our code. We only used plugins to polyfill HTML5 features not supported by all browsers (e.g., placeholder text in IE9 and input type range for IE9 and Firefox).</li>
       </ul>
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>Using local storage to improve performance</h2>
-      <h3>Bing and Google use local storage for their mobile websites</h3>
+      <h2>Best Practices</h2>
+      <h3>Setting properties</h3>
     </hgroup>
     <article class="smaller">
-      <figure style="float: right; padding-left: 0.25em;">
-        <img src="images/iphone-message.png" alt="" width="300">
-        <figcaption>On the iPhone, once the domain<br>exceeds the limit, it'll prompt you.</figcaption>
-      </figure>
-      <p>They stash STYLE &amp; SCRIPT blocks to be used on subsequent page views.</p>
-      <pre style="width: 68%; overflow: auto;"> mres.-8Y5Dw_nSfQztyYx: &lt;style&gt;a{color:#11c}a:visited{color:#551a8b}body{margin:0;pad...
- mres.-Kx7q38gfNkQMtpx: &lt;script&gt; //&lt;![CDATA[ var Zn={},bo=function(a,b){b&amp;&amp;Zn[b]||(ne...
- mres.0kH3gDiUpLA5DKWN: &lt;style&gt;.zl9fhd{padding:5px 0 0}.sc59bg{clear:both}.pyp56b{tex...
- mres.0thHLIQNAKnhcwR4: &lt;style&gt;.fdwkxt{width:49px;height:9px;background:url("data:ima...
- mres.36ZFOahhhEK4t3WE: &lt;script&gt; //&lt;![CDATA[ var kk,U,lk;(function(){var a={};U=funct...
- mres.3lEpts5kTxnI2I5S: &lt;script&gt; //&lt;![CDATA[ var Ec,Fc,Gc=function(a){this.Jl=a},Hc="...
- mres.4fbdvu9mdAaBINjE: &lt;script&gt; //&lt;![CDATA[ u("_clOnSbt",function(){var a=document.g...
- mres.5QIb-AahnDgEGlYP: &lt;script&gt; //&lt;![CDATA[ var cb=function(a){this.Cc=a},db=/\s*;\s...
- mres:time.-8Y5Dw_nSfQ...: 1301368541872
- mres:time.-Kx7q38gfNk...: 1301368542755
- mres:time.0kH3gDiUpLA...: 1301368542257
- mres:time.0thHLIQNAKn...: 1301368542223
- mres:time.36ZFOahhhEK...: 1301368542635
- mres:time.3lEpts5kTxn...: 1301368542579
- mres:time.4fbdvu9mdAa...: 1301368542720
- mres:time.5QIb-AahnDg...: 1301368542856</pre>
+      <p>As an editing tool, properties are frequently updated and observers are constantly triggered. To minimize the effect on performance, we:</p>
+      <pre class="prettyprint" data-lang="javascript">
+// Set multiple properties at once
+this.set({ property1: 'value1', property2: 'value2' });
 
-      <footer class="source">Steve Souders, "<a href="http://www.stevesouders.com/blog/2011/03/28/storager-case-study-bing-google/">Storager case study: Bing, Google</a>"</footer>
-    </article>
-  </slide>
+// Suspend observer triggers
+Ember.beginPropertyChanges();
+if (this.get('condition1')) { this.set('property1', 'value1'); }
+if (this.get('condition2')) { this.set('property2', 'value2'); }
+// Restore triggers and flush
+Ember.endPropertyChanges();
 
-  <slide>
-    <hgroup>
-      <h2>RESS (Responsive Web Design + Server Side Components)</h2>
-      <h3>Mix and match a variety of strategies</h3>
-    </hgroup>
-    <article class="smaller">
-      <h4>Offload work to the server when possible</h4>
-      <ul>
-        <li>Serve smaller libraries like Zepto for mobile browsers.</li>
-        <li>Use local storage to cache JavaScript and CSS&mdash;no need to serve these on the next visit.</li>
-        <li>Translate content on the server, and load already translated templates in our HTML and JavaScript.</li>
-        <li>Content that isn't dynamic and doesn't need to be regenerated can be compiled on the server.</li>
-        <li>Use a server-side solution to serve the best-quality image for the device without wasting bandwidth.</li>
-      </ul>
-      <p>Browser sniffing isn't ideal, but if we use a library like <a href="https://github.com/fnando/browser">browser gem</a> that's kept up to date, we can offer a much better user experience.</p>
-      <p><strong>Let's not build apps that are 100% front-end.</strong></p>
+// Make a series of property changes together in an exception-safe way
+Ember.changeProperties(function() {
+  obj.set('property1', 'value1');
+  obj.set('property2', 'value2');
+});
+</pre>
     </article>
     <footer class="source">
-      <ul>
-        <li>Chris Coyier, "<a href="http://css-tricks.com/mixing-responsive-design-and-mobile-templates/">Mixing Responsive Design and Mobile Templates</a>"</li>
-        <li>Luke Wroblewski, "<a href="http://www.lukew.com/ff/entry.asp?1392">RESS: Responsive Design + Server Side Components</a>"</li>
-        <li>Anders Andersen, "<a href="http://www.slideshare.net/4nd3rsen/ress-responsive-web-design-serverside-components">RESS - Responsive Web Design + Serverside components</a>"</li>
-      </ul>
-    </footer>
+      Source: Stackoverflow.com, "<a href="http://stackoverflow.com/a/8754629/1257687">EmberJS Set Multiple Properties At Once</a>", Luke Melia's response
+     </footer>
   </slide>
+
+  <!-- SEMAPHORES ??? -->
 
   <slide class="backdrop"></slide>
-
 </slides>
 
 <script>
@@ -565,115 +207,6 @@ console.timeEnd('jQuery');</pre>
 //   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 //   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 // })();
-function runById() {
-  if (!console.time) {
-    runByIdForIE();
-    return;
-  }
-
-  var elem, i, len = 100000, selector = 'this-is-an-id';
-
-  console.time('nativeJsById');
-  for (i = 0; i < len; i++) {
-    elem = document.getElementById(selector);
-  }
-  console.timeEnd('nativeJsById');
-
-  console.time('nativeJsQuerySelector');
-  for (i = 0; i < len; i++) {
-    elem = document.querySelector('#' + selector);
-  }
-  console.timeEnd('nativeJsQuerySelector');
-
-  console.time('jQuery');
-  for (i = 0; i < len; i++) {
-    elem = $('#' + selector);
-  }
-  console.timeEnd('jQuery');
-}
-
-function runByIdForIE() {
-  var elem, i, len = 100000, selector = 'this-is-an-id';
-
-  var start = Date.now();
-  for (i = 0; i < len; i++) {
-    elem = document.getElementById(selector);
-  }
-  console.log('nativeJsById ' + (Date.now()-start));
-
-  start = Date.now();
-  for (i = 0; i < len; i++) {
-    elem = document.querySelector('.' + selector);
-  }
-  console.log('nativeJsQuerySelector ' + (Date.now()-start));
-
-  start = Date.now();
-  for (i = 0; i < len; i++) {
-    elem = $('#' + selector);
-  }
-  console.log('jQuery ' + (Date.now()-start));
-}
-
-function runByClass() {
-  if (!console.time) {
-    runByClassForIE();
-    return;
-  }
-
-  var elem, i, len = 100000, selector = 'this-is-a-class';
-
-  console.time('nativeJs');
-  for (i = 0; i < len; i++) {
-    elem = document.getElementsByClassName(selector);
-  }
-  console.timeEnd('nativeJs');
-
-  console.time('nativeJsQuerySelector');
-  for (i = 0; i < len; i++) {
-    elem = document.querySelector('.' + selector);
-  }
-  console.timeEnd('nativeJsQuerySelector');
-
-  console.time('nativeJsQuerySelectorAll');
-  for (i = 0; i < len; i++) {
-    elem = document.querySelectorAll('.' + selector);
-  }
-  console.timeEnd('nativeJsQuerySelectorAll');
-
-  console.time('jQuery');
-  for (i = 0; i < len; i++) {
-    elem = $('.' + selector);
-  }
-  console.timeEnd('jQuery');
-}
-
-function runByClassForIE() {
-  var elem, i, len = 100000, selector = 'this-is-a-class';
-
-  var start = Date.now();
-  for (i = 0; i < len; i++) {
-    elem = document.getElementsByClassName(selector);
-  }
-  console.log('nativeJsByClass ' + (Date.now()-start));
-
-  start = Date.now();
-  for (i = 0; i < len; i++) {
-    elem = document.querySelector('.' + selector);
-  }
-  console.log('nativeJsQuerySelector ' + (Date.now()-start));
-
-  start = Date.now();
-  for (i = 0; i < len; i++) {
-    elem = document.querySelectorAll('.' + selector);
-  }
-  console.log('nativeJsQuerySelectorAll ' + (Date.now()-start));
-
-  start = Date.now();
-  for (i = 0; i < len; i++) {
-    elem = $('.' + selector);
-  }
-  console.log('jQuery ' + (Date.now()-start));
-}
 </script>
 
 <!--[if IE]>
