@@ -123,8 +123,57 @@
     </hgroup>
     <article>
       <ul>
-        <li><strong>Binding didn't always trigger in the ideal order.</strong> In some cases, we were able to use the Ember.beforeObserver(). TODO: panel bindings may be an example, multiple panels showing up at once?</li>
+        <li><strong>Binding didn't always trigger in the ideal order.</strong> In some cases, we were able to use the Ember.beforeObserver(). In other cases, we added additional properties to cascade observers.</li>
         <li><strong><code>isVisible</code> was slow and made the app seem sluggish.</strong> Swapping this out with the class name binding reduced the lag time.</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Performance</h2>
+      <h3>Big Lists</h3>
+    </hgroup>
+    <article>
+      <p>We had two particular cases where building big Ember.CollectionViews caused browsers to render very slowly.</p>
+      <ul>
+        <li><strong>Media panel.</strong> Displays all the images and media files the user has uploaded for their book.</li>
+        <li><strong>Birds eye view.</strong> Gives users an overview of their book, displaying a thumbnail size view of each page.</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Performance</h2>
+      <h3>Big Lists: Media Panel</h3>
+    </hgroup>
+    <article>
+      <p>We built a custom CollectionView that we called IncrementalCollectionView.</p>
+      <ul>
+        <li></li>
+        <li></li>
+      </ul>
+    </article>
+  </slide>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Performance</h2>
+      <h3>Big Lists: Birds Eye View</h3>
+    </hgroup>
+    <article>
+      <p>At first, we built this reusing views we biult to display a book page. For an overview though, this wasn't appropriate.</p>
+      <h3>Main problems</h3>
+      <ul>
+        <li>Books can have any number of pages.</li>
+        <li>Pages can be very complex, with any number of images and any length of text.</li>
+      </ul>
+      <ul>
+        <li></li>
+        <li></li>
+      </ul>
     </article>
   </slide>
 
